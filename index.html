@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Survey Form</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="title">Survey Form By HDK</h1>
+      <form id="form">
+        <label id="name-label"
+          >Họ tên
+          <input
+            class="full-width required"
+            type="text"
+            id="name"
+            name="name-label"
+            placeholder="Enter your name"
+            onblur="this.value = this.value.trim().replace(/\s+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());"
+            required
+        /></label>
+        <label id="address-label"
+          >Address
+          <input
+            class="full-width"
+            type="text"
+            id="address"
+            name="address-label"
+            placeholder="Enter your address"
+            
+        /></label>
+        <label class="tick"
+          >Gender
+          <label name="abc"
+            ><input type="radio" value="CS" name="radio-check" /> Male</label
+          >
+          <label name="abc"
+            ><input type="radio" value="IT" name="radio-check" /> Female</label
+          >
+        </label>
+        <label id="dob-label"
+          >Birth
+          <input
+            class="full-width required"
+            type="text"
+            id="dob"
+            name="dob-label"
+            placeholder="Enter your birth"
+            oninput="formatDOB(event)"
+            required
+        /></label>
+        <label id="email-label"
+          >Email
+          <span id="emailError" class="error"></span><br>
+          <input
+            class="full-width required"
+            type="text"
+            id="email"
+            name="email-label"
+            placeholder="Enter your email"
+            required
+        /></label>
+        
+
+        <label class="tick"
+          >Registration Course
+          <label name="abc"
+            ><input type="checkbox" value="FE" name="checkbox-check" /> Frontend
+            English</label
+          >
+          <label name="abc"
+            ><input type="checkbox" value="BE" name="checkbox-check" /> Backend
+            Administration</label
+          >
+          <label name="abc"
+            ><input type="checkbox" value="FS" name="checkbox-check" />
+            IT</label
+          >
+        </label>
+        <label id="password-label"
+          >Password
+          <input
+            class="full-width required"
+            type="password"
+            id="password"
+            name="password-label"
+            placeholder="Enter your password"
+            required
+        /></label>
+        <label id="rePassword-label"
+          >Retype Password
+          <span id="rePasswordError" class="error"></span><br>
+          <input
+            class="full-width required"
+            type="password"
+            id="rePassword"
+            name="rePassword-label"
+            placeholder="Retype your password"
+            required
+        /></label>
+       
+
+        <label
+          >Note
+          <textarea
+            class="full-width"
+            rows="5"
+            placeholder="Enter your comment"
+          ></textarea>
+        </label>
+        <button type="submit" id="submit" />Submit</button>
+      </form>
+    </div>
+  </body>
+  <script>
+    function init() {
+      document.getElementById("name").focus();
+      document.getElementById("form").addEventListener("submit", validateForm);
+    }
+    function validateForm(event) {
+      event.preventDefault();
+      let nameField = document.getElementById("name");
+      let emailField = document.getElementById("email");
+      let dobField = document.getElementById("dob");
+      let passwordField = document.getElementById("password");
+      let rePasswordField = document.getElementById("rePassword");
+      let isValid = true;
+
+      nameField.value = nameField.value
+        .trim()
+        .replace(/\s+/g, " ")
+        .replace(/\b\w/g, (c) => c.toUpperCase());
+    
+
+    let emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(emailField.value)) {
+      document.getElementById("emailError").innerText =
+        "Email is not in correct format.";
+      isValid = false;
+    } else {
+      document.getElementById("emailError").innerText = "";
+    }
+
+    if (passwordField.value !== rePasswordField.value) {
+      document.getElementById("rePasswordError").innerText =
+        "Password retyped incorrect";
+      isValid = false;
+    } else {
+      document.getElementById("rePasswordError").innerText = "";
+    }
+
+    if (
+      !nameField.value ||
+      !emailField.value ||
+      !dobField.value ||
+      !passwordField.value ||
+      !rePasswordField.value
+    ) {
+      alert("Please fill in all required information");
+      isValid = false;
+    }
+    if (!isValidDate(dobField.value)) {
+      alert("Date is invalid")
+      isValid = false
+    }
+
+    if (isValid) {
+      alert("Form submitted successfully!");
+    }
+  }
+  function isValidDate(dateString) {
+    // Regular expression to check date format DD/MM/YYYY
+    const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
+
+    if (!regex.test(dateString)) {
+        return false;
+    }
+
+    const [day, month, year] = dateString.split('/').map(Number);
+
+    // Check if date is valid
+    const date = new Date(year, month - 1, day);
+    return date.getFullYear() === year && date.getMonth() + 1 === month && date.getDate() === day;
+}
+
+    function formatDOB(event) {
+      let value = event.target.value.replace(/\D/g, "");
+      if (value.length > 4) {
+        value = value.replace(/(\d{2})(\d{2})(\d+)/, "$1/$2/$3");
+      } else if (value.length > 2) {
+        value = value.replace(/(\d{2})(\d+)/, "$1/$2");
+      }
+      event.target.value = value;
+    }
+
+    window.onload = init;
+  </script>
+</html>
